@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/pages/page_game.dart';
+import 'package:random_game/pages/page_sign_up.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: ThemeData(
           ),
-          home: const GamePage(),
+          home: const SignUpPage(),
         );
       },
     );

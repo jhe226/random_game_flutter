@@ -17,7 +17,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   List<User> userList = [];
-  final _textController = TextEditingController();
+  int cnt = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildUserListView(),
-              _buildAddUserTextFormField(),
               _buildSignUpButton(),
               _buildStartButton(),
             ],
@@ -65,37 +64,27 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildAddUserTextFormField() {
-    return Container(
-      width: 200.w,
-      margin: EdgeInsets.only(bottom: 20.h),
-      alignment: Alignment.center,
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: '참가자 이름',
-          hintText: '참가자 이름을 입력하세요.',
-          labelStyle: TextStyle(fontSize: 13.sp, color: Colors.pink),
-          hintStyle: TextStyle(fontSize: 13.sp),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.pink, width: 1.w),
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-        ),
-        cursorColor: Colors.pink,
-        controller: _textController,
-        keyboardType: TextInputType.text,
-        maxLines: 1,
-      ),
-    );
-  }
 
   Widget _buildSignUpButton() {
     return OoElevatedButton(
       buttonPressed: () {
-
+        if(userList.length > 4) {
+          return;
+        } else {
+          _addUser();
+        }
       },
       buttonTitle: '참가자 등록하기',
     );
+  }
+
+  void _addUser() {
+    setState(() {
+      cnt++;
+      for(int i = 0; i < cnt; i++) {
+        userList.add(User(userName: 'User $cnt'));
+      }
+    });
   }
 
   Widget _buildStartButton() {
