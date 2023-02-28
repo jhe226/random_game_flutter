@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/components/oo_elevated_button.dart';
@@ -36,6 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
               _buildUserListView(),
               _buildSignUpButton(),
+              SizedBox(height: 10.h),
               _buildStartButton(),
             ],
           ),
@@ -58,22 +57,16 @@ class _SignUpPageState extends State<SignUpPage> {
         scrollDirection: Axis.horizontal,
         itemCount: userList.length,
         itemBuilder: (context, position) {
+          print('userList: ${userList[position].userName}');
           return UserListCard(userName: userList[position].userName);
         },
       ),
     );
   }
 
-
   Widget _buildSignUpButton() {
     return OoElevatedButton(
-      buttonPressed: () {
-        if(userList.length > 4) {
-          return;
-        } else {
-          _addUser();
-        }
-      },
+      buttonPressed: () => _addUser(),
       buttonTitle: '참가자 등록하기',
     );
   }
@@ -81,21 +74,33 @@ class _SignUpPageState extends State<SignUpPage> {
   void _addUser() {
     setState(() {
       cnt++;
-      for(int i = 0; i < cnt; i++) {
+      while (cnt < 5) {
         userList.add(User(userName: 'User $cnt'));
+        break;
       }
     });
   }
 
   Widget _buildStartButton() {
-    return OoElevatedButton(
-      buttonPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const GamePage()),
-        );
+    return ElevatedButton(
+      onPressed: () {
+        if (cnt > 0 && cnt < 5) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const GamePage()),
+          );
+        } else {
+          return;
+        }
       },
-      buttonTitle: '시작하기',
+      style: ElevatedButton.styleFrom(
+          backgroundColor:
+              (cnt > 0 && cnt < 5) ? Colors.pink[300] : Colors.grey),
+      child: Text(
+        '시작하기',
+        style: TextStyle(
+            color: (cnt > 0 && cnt < 5) ? Colors.white : Colors.black26),
+      ),
     );
   }
 }

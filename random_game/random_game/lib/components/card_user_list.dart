@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserListCard extends StatelessWidget {
-  const UserListCard({required this.userName, this.onTap, super.key});
+  const UserListCard({this.userName, this.onTap, super.key});
 
-  final String userName;
+  final String? userName;
   final VoidCallback? onTap;
 
   @override
@@ -12,8 +12,9 @@ class UserListCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: 70.w,
-        height: 70.w,
+        width: 60.w,
+        height: 60.w,
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -27,7 +28,7 @@ class UserListCard extends StatelessWidget {
             ),
             SizedBox(height: 15.h),
             Text(
-              userName,
+              userName!,
               style: TextStyle(fontSize: 15.sp, color: Colors.grey[300]),
             ),
           ],

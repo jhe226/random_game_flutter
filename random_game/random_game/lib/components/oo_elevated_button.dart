@@ -10,7 +10,8 @@ class OoElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120.w,
+      width: 150.w,
+      height: 30.h,
       child: ElevatedButton(
         onPressed: buttonPressed,
         style: ElevatedButton.styleFrom(backgroundColor: Colors.pink[300]),

@@ -1,6 +1,6 @@
 class User {
-  String userName;
+  String? userName;
   int? score;
 
-  User({required this.userName, this.score});
+  User({this.userName, this.score});
 }
