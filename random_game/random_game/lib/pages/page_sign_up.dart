@@ -68,12 +68,12 @@ class _SignUpPageState extends State<SignUpPage> {
       width: 150.w,
       height: 30.h,
       child: ElevatedButton(
-        onPressed: () => cnt > 4 ? {} : _addUser(),
+        onPressed: () => (cnt < 4) ? _addUser() : {},
         style: ElevatedButton.styleFrom(
-            backgroundColor: cnt > 4 ? Colors.grey : Colors.pink[300]),
+            backgroundColor: (cnt < 4) ? Colors.pink[300] : Colors.grey),
         child: Text(
           '참가자 등록하기',
-          style: TextStyle(color: cnt > 4 ? Colors.black26 : Colors.white),
+          style: TextStyle(color: (cnt < 4) ? Colors.white : Colors.black26),
         ),
       ),
     );
@@ -84,6 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
       cnt++;
       while (cnt < 5) {
         userList.add(User(userName: 'User $cnt'));
+        print(cnt);
         break;
       }
     });
@@ -91,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildStartButton() {
     return ElevatedButton(
-      onPressed: () => (cnt > 0 && cnt < 5)
+      onPressed: () => (cnt > 0)
           ? Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const GamePage()),
@@ -99,11 +100,11 @@ class _SignUpPageState extends State<SignUpPage> {
           : {},
       style: ElevatedButton.styleFrom(
           backgroundColor:
-              (cnt > 0 && cnt < 5) ? Colors.pink[300] : Colors.grey),
+              (cnt > 0) ? Colors.pink[300] : Colors.grey),
       child: Text(
         '시작하기',
         style: TextStyle(
-            color: (cnt > 0 && cnt < 5) ? Colors.white : Colors.black26),
+            color: (cnt >0) ? Colors.white : Colors.black26),
       ),
     );
   }
