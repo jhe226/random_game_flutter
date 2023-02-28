@@ -68,12 +68,12 @@ class _SignUpPageState extends State<SignUpPage> {
       width: 150.w,
       height: 30.h,
       child: ElevatedButton(
-        onPressed: () => cnt > 5 ? {} : _addUser(),
+        onPressed: () => cnt > 4 ? {} : _addUser(),
         style: ElevatedButton.styleFrom(
-            backgroundColor: cnt > 5 ? Colors.grey : Colors.pink[300]),
+            backgroundColor: cnt > 4 ? Colors.grey : Colors.pink[300]),
         child: Text(
           '참가자 등록하기',
-          style: TextStyle(color: cnt > 5 ? Colors.black26 : Colors.white),
+          style: TextStyle(color: cnt > 4 ? Colors.black26 : Colors.white),
         ),
       ),
     );
