@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:random_game/components/oo_elevated_button.dart';
 import 'package:random_game/pages/page_game.dart';
 
 import '../components/card_user_list.dart';
@@ -65,9 +64,18 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildSignUpButton() {
-    return OoElevatedButton(
-      buttonPressed: () => _addUser(),
-      buttonTitle: '참가자 등록하기',
+    return SizedBox(
+      width: 150.w,
+      height: 30.h,
+      child: ElevatedButton(
+        onPressed: () => cnt > 5 ? {} : _addUser(),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: cnt > 5 ? Colors.grey : Colors.pink[300]),
+        child: Text(
+          '참가자 등록하기',
+          style: TextStyle(color: cnt > 5 ? Colors.black26 : Colors.white),
+        ),
+      ),
     );
   }
 
@@ -83,16 +91,12 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildStartButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (cnt > 0 && cnt < 5) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const GamePage()),
-          );
-        } else {
-          return;
-        }
-      },
+      onPressed: () => (cnt > 0 && cnt < 5)
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const GamePage()),
+            )
+          : {},
       style: ElevatedButton.styleFrom(
           backgroundColor:
               (cnt > 0 && cnt < 5) ? Colors.pink[300] : Colors.grey),
