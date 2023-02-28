@@ -62,7 +62,7 @@ class _GamePageState extends State<GamePage> {
         buttonPressed: () {
           setState(() {
             int rnd = Random().nextInt(100) + 1;
-            scoreList.add(User(score: rnd));
+            scoreList.add(User(userName: '', score: rnd));
           });
         },
         buttonTitle: '숫자 생성하기');

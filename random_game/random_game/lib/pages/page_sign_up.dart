@@ -73,10 +73,12 @@ class _SignUpPageState extends State<SignUpPage> {
         // onPressed: () => (userList.length < 4) ? _addUser() : {},
         onPressed: userList.length < 4 ? _addUser : null,
         style: ElevatedButton.styleFrom(
-            backgroundColor: (userList.length < 4) ? Colors.pink[300] : Colors.grey),
+            backgroundColor: (userList.length < 4) ? Colors.pink[300] : Colors
+                .grey),
         child: Text(
           '참가자 등록하기',
-          style: TextStyle(color: (userList.length < 4) ? Colors.white : Colors.black26),
+          style: TextStyle(
+              color: (userList.length < 4) ? Colors.white : Colors.black26),
         ),
       ),
     );
@@ -84,8 +86,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _addUser() {
     setState(() {
-      if(userList.length < 4) {
-        userList.add(User(userName: 'User ${userList.length}'));
+      if (userList.length < 4) {
+        userList.add(User(userName: 'User ${userList.length + 1}', score: 0));
       }
     });
   }
@@ -97,10 +99,12 @@ class _SignUpPageState extends State<SignUpPage> {
       child: ElevatedButton(
         onPressed: () => (userList.isNotEmpty) ? _removeUser() : {},
         style: ElevatedButton.styleFrom(
-            backgroundColor: (userList.isNotEmpty) ? Colors.pink[300] : Colors.grey),
+            backgroundColor: (userList.isNotEmpty) ? Colors.pink[300] : Colors
+                .grey),
         child: Text(
           '참가자 삭제하기',
-          style: TextStyle(color: (userList.isNotEmpty) ? Colors.white : Colors.black26),
+          style: TextStyle(
+              color: (userList.isNotEmpty) ? Colors.white : Colors.black26),
         ),
       ),
     );
@@ -108,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _removeUser() {
     setState(() {
-      if(userList.isNotEmpty) {
+      if (userList.isNotEmpty) {
         // userList.removeWhere((element) => userList[userList.length].userName == 'User ${userList.length}');
         userList.removeLast();
       }
@@ -119,20 +123,26 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildStartButton() {
     return ElevatedButton(
-      onPressed: () => (userList.isNotEmpty)
-          ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage()),
-            )
-          : {},
+      onPressed: _moveGamePage,
       style: ElevatedButton.styleFrom(
           backgroundColor:
-              (userList.isNotEmpty) ? Colors.pink[300] : Colors.grey),
+          (userList.length > 2) ? Colors.pink[300] : Colors.grey),
       child: Text(
         '시작하기',
         style: TextStyle(
-            color: (userList.isNotEmpty) ? Colors.white : Colors.black26),
+            color: (userList.length > 2) ? Colors.white : Colors.black26),
       ),
     );
+  }
+
+  void _moveGamePage() {
+    if (userList.length > 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const GamePage()),
+      );
+    } else {
+      null;
+    }
   }
 }
