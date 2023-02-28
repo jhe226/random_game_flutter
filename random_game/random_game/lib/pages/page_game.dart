@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/components/oo_elevated_button.dart';
 
 import '../components/card_user_list.dart';
+import '../components/user.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -13,16 +14,11 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  List<List<int>> numberList = [];
+  List<User> scoreList = [];
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
-
-    for (int i = 0; i < 2; i++) {
-      numberList.add(<int>[]);
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink[300],
@@ -38,11 +34,9 @@ class _GamePageState extends State<GamePage> {
             const Text(
               'push the button',
             ),
-            Text(
-              '$numberList',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            // _buildScore(),
             _buildGetNumberButton(),
+            SizedBox(height: 10.h),
             _buildResultButton(),
           ],
         ),
@@ -50,12 +44,25 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  Widget _buildScore() {
+    return Container(
+        width: 360.w,
+        height: 40.h,
+        alignment: Alignment.center,
+        child: ListView.builder(
+          itemBuilder: (context, index) => Text(
+            '${scoreList[index].score}',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ));
+  }
+
   Widget _buildGetNumberButton() {
     return OoElevatedButton(
         buttonPressed: () {
           setState(() {
-            var rnd = Random().nextInt(100) + 1;
-            numberList[index].add(rnd);
+            int rnd = Random().nextInt(100) + 1;
+            scoreList.add(User(score: rnd));
           });
         },
         buttonTitle: '숫자 생성하기');
@@ -64,47 +71,52 @@ class _GamePageState extends State<GamePage> {
   Widget _buildResultButton() {
     return OoElevatedButton(
         buttonPressed: () => showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            insetPadding: EdgeInsets.symmetric(vertical: 200.h),
-            title: const Text('결과보기'),
-            content: _showResult(),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                insetPadding: EdgeInsets.symmetric(vertical: 200.h),
+                title: const Text('결과보기'),
+                content: _showResult(),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         buttonTitle: '결과 보기');
   }
 
   Widget _buildUserList() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        UserListCard(
-          userName: 'user1',
-          onTap: ()=>_resetNumber(0),
-        ),
-        UserListCard(
-          userName: 'user2',
-          onTap: ()=>_resetNumber(1),
-        ),
-      ],
+    return Container(
+      width: 360.w,
+      height: 100.h,
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: scoreList.length,
+        itemBuilder: (context, position) {
+          print('userList: ${scoreList[position].userName}');
+          return UserListCard(userName: scoreList[position].userName);
+        },
+      ),
     );
   }
 
   void _resetNumber(int index) {
     setState(() {
-      numberList[index].clear();
+      scoreList.clear();
     });
   }
 
-  List<List<int>> getResult() {
-    numberList.sort();
-    return numberList;
+  List<User> getResult() {
+    scoreList.sort();
+    return scoreList;
   }
 
   Widget _showResult() {
@@ -117,5 +129,4 @@ class _GamePageState extends State<GamePage> {
       ),
     );
   }
-
 }

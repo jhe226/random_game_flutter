@@ -35,6 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
               _buildSignUpButton(),
               SizedBox(height: 10.h),
               _buildStartButton(),
+              SizedBox(height: 10.h),
+              _buildDeleteUserButton(),
             ],
           ),
         ),
@@ -65,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _buildSignUpButton() {
     return SizedBox(
-      width: 150.w,
+      width: 125.w,
       height: 30.h,
       child: ElevatedButton(
         onPressed: () => (cnt < 4) ? _addUser() : {},
@@ -82,11 +84,39 @@ class _SignUpPageState extends State<SignUpPage> {
   void _addUser() {
     setState(() {
       cnt++;
+      print('#############cnt: $cnt');
       while (cnt < 5) {
         userList.add(User(userName: 'User $cnt'));
-        print(cnt);
         break;
       }
+    });
+  }
+
+  Widget _buildDeleteUserButton() {
+    return SizedBox(
+      width: 125.w,
+      height: 30.h,
+      child: ElevatedButton(
+        onPressed: () => (cnt > 0) ? _removeUser() : {},
+        style: ElevatedButton.styleFrom(
+            backgroundColor: (cnt > 0) ? Colors.pink[300] : Colors.grey),
+        child: Text(
+          '참가자 삭제하기',
+          style: TextStyle(color: (cnt > 0) ? Colors.white : Colors.black26),
+        ),
+      ),
+    );
+  }
+
+  void _removeUser() {
+    setState(() {
+      cnt--;
+      while(cnt < 0) {
+        userList.removeWhere((element) => userList[cnt].userName == 'User $cnt');
+        break;
+      }
+      print('#############cnt: $cnt');
+      print('#############userList: $userList');
     });
   }
 
