@@ -1,9 +1,9 @@
 import 'dart:math';
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/components/oo_elevated_button.dart';
 
-import '../components/card_user_list.dart';
 import '../components/radio_button.dart';
 import '../components/radio_controller.dart';
 import '../components/user.dart';
@@ -11,7 +11,7 @@ import '../components/user.dart';
 class GamePage extends StatefulWidget {
   List<User> scoreList;
 
-  GamePage({required this.scoreList});
+  GamePage({super.key, required this.scoreList});
 
   final RadioGroupController _controller = RadioGroupController(-1);
 
@@ -20,7 +20,7 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  int index = 0;
+  User? selectedModel;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +36,11 @@ class _GamePageState extends State<GamePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildUserList(),
-            SizedBox(height: 30.h),
-            const Text(
-              'push the button',
-            ),
+            SizedBox(height: 20.h),
+            const Text('push the button'),
+            SizedBox(height: 10.h),
             _buildScore(),
+            SizedBox(height: 5.h),
             _buildGetNumberButton(),
             SizedBox(height: 10.h),
             _buildResultButton(),
@@ -48,54 +48,6 @@ class _GamePageState extends State<GamePage> {
         ),
       ),
     );
-  }
-
-  Widget _buildScore() {
-    return Container(
-        width: 360.w,
-        height: 40.h,
-        alignment: Alignment.center,
-        child: ListView.builder(
-          itemCount: widget.scoreList.length,
-          itemBuilder: (context, index) => Text(
-            '${widget.scoreList[index].score}',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ));
-  }
-
-  Widget _buildGetNumberButton() {
-    return OoElevatedButton(
-        buttonPressed: () {
-          setState(() {
-            int rnd = Random().nextInt(100) + 1;
-            widget.scoreList[index].score = rnd;
-            print('###############=user: ${widget.scoreList[index].userName}');
-            print('###############=score: ${widget.scoreList[index].score}');
-          });
-        },
-        buttonTitle: '숫자 생성하기');
-  }
-
-
-
-  Widget _buildResultButton() {
-    return OoElevatedButton(
-        buttonPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                insetPadding: EdgeInsets.symmetric(vertical: 200.h),
-                title: const Text('결과보기'),
-                content: _showResult(),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-        buttonTitle: '결과 보기');
   }
 
   Widget _buildUserList() {
@@ -112,13 +64,15 @@ class _GamePageState extends State<GamePage> {
         scrollDirection: Axis.horizontal,
         itemCount: widget.scoreList.length,
         itemBuilder: (context, position) {
-          print('userList: ${widget.scoreList[position].userName}');
+          print('##########=userList: ${widget.scoreList[position].userName}');
           return RadioButtonCustom(
             controller: widget._controller,
             userName: widget.scoreList[position].userName,
             index: position,
             onEvent: () {
-              widget.scoreList[position].score = 0;
+              setState(() {
+                selectedModel = widget.scoreList[position];
+              });
             },
           );
         },
@@ -126,9 +80,62 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  User getResult() {
-    widget.scoreList.sort();
-    return widget.scoreList.first;
+  Widget _buildScore() {
+    return Container(
+        width: 360.w,
+        height: 40.h,
+        alignment: Alignment.center,
+        child: ListView.builder(
+          itemCount: widget.scoreList.length,
+          itemBuilder: (context, index) => Text(
+            '${selectedModel?.score ?? 0}',
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+        ));
+  }
+
+  Widget _buildGetNumberButton() {
+    return OoElevatedButton(
+        buttonPressed: () {
+          setState(() {
+            int rnd = Random().nextInt(100) + 1;
+            selectedModel?.score = rnd;
+            print('###############=user: ${selectedModel?.userName}');
+            print('###############=score: ${selectedModel?.score}');
+          });
+        },
+        buttonTitle: '숫자 생성하기');
+  }
+
+  Widget _buildResultButton() {
+    return OoElevatedButton(
+        buttonPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4))),
+                insetPadding: EdgeInsets.symmetric(vertical: 200.h),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 60.h, horizontal: 20.w),
+                content: _showResult(),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Colors.pink),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        buttonTitle: '결과 보기');
+  }
+
+  String getResult() {
+    widget.scoreList.sort((a, b) => a.score.compareTo(b.score));
+    return '1위\n${widget.scoreList.reversed.first.userName}\n${widget.scoreList.reversed.first.score}점';
   }
 
   Widget _showResult() {
@@ -136,7 +143,15 @@ class _GamePageState extends State<GamePage> {
       alignment: Alignment.center,
       child: Column(
         children: [
-          Text('${getResult()}'),
+          Text(
+            '결과',
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+          ),
+          SizedBox(height: 15.h),
+          Text(
+            getResult(),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

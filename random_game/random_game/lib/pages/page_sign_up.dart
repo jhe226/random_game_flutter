@@ -14,6 +14,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   List<User> userList = [];
+  final int _min = 1;
+  final int _max = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -72,15 +74,14 @@ class _SignUpPageState extends State<SignUpPage> {
       width: 125.w,
       height: 30.h,
       child: ElevatedButton(
-        // onPressed: () => (userList.length < 4) ? _addUser() : {},
-        onPressed: userList.length < 4 ? _addUser : null,
+        onPressed: userList.length < _max ? _addUser : null,
         style: ElevatedButton.styleFrom(
-            backgroundColor: (userList.length < 4) ? Colors.pink[300] : Colors
+            backgroundColor: (userList.length < _max) ? Colors.pink[300] : Colors
                 .grey),
         child: Text(
           '참가자 등록하기',
           style: TextStyle(
-              color: (userList.length < 4) ? Colors.white : Colors.black26),
+              color: (userList.length < _max) ? Colors.white : Colors.black26),
         ),
       ),
     );
@@ -88,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _addUser() {
     setState(() {
-      if (userList.length < 4) {
+      if (userList.length < _max) {
         userList.add(User(userName: 'User ${userList.length + 1}', score: 0));
       }
     });
@@ -127,23 +128,23 @@ class _SignUpPageState extends State<SignUpPage> {
       onPressed: _moveGamePage,
       style: ElevatedButton.styleFrom(
           backgroundColor:
-          (userList.length > 1) ? Colors.pink[300] : Colors.grey),
+          (userList.length > _min) ? Colors.pink[300] : Colors.grey),
       child: Text(
         '시작하기',
         style: TextStyle(
-            color: (userList.length > 1) ? Colors.white : Colors.black26),
+            color: (userList.length > _min) ? Colors.white : Colors.black26),
       ),
     );
   }
 
   void _moveGamePage() {
-    if (userList.length > 1) {
+    if (userList.length > _min) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => GamePage(scoreList: userList,)),
+        MaterialPageRoute(builder: (context) => GamePage(scoreList: userList)),
       );
     } else {
-      null;
+      return;
     }
   }
 
@@ -156,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Text(
         '초기화',
         style: TextStyle(
-            color: (userList.length > 1) ? Colors.white : Colors.black26),
+            color: (userList.length > _min) ? Colors.white : Colors.black26),
       ),
     );
   }
