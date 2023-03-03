@@ -36,6 +36,8 @@ class _SignUpPageState extends State<SignUpPage> {
               _buildStartButton(),
               SizedBox(height: 10.h),
               _buildDeleteUserButton(),
+              SizedBox(height: 10.h),
+              _buildResetButton(),
             ],
           ),
         ),
@@ -113,7 +115,6 @@ class _SignUpPageState extends State<SignUpPage> {
   void _removeUser() {
     setState(() {
       if (userList.isNotEmpty) {
-        // userList.removeWhere((element) => userList[userList.length].userName == 'User ${userList.length}');
         userList.removeLast();
       }
       print('#############remove Cnt: ${userList.length}');
@@ -126,23 +127,47 @@ class _SignUpPageState extends State<SignUpPage> {
       onPressed: _moveGamePage,
       style: ElevatedButton.styleFrom(
           backgroundColor:
-          (userList.length > 2) ? Colors.pink[300] : Colors.grey),
+          (userList.length > 1) ? Colors.pink[300] : Colors.grey),
       child: Text(
         '시작하기',
         style: TextStyle(
-            color: (userList.length > 2) ? Colors.white : Colors.black26),
+            color: (userList.length > 1) ? Colors.white : Colors.black26),
       ),
     );
   }
 
   void _moveGamePage() {
-    if (userList.length > 2) {
+    if (userList.length > 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const GamePage()),
+        MaterialPageRoute(builder: (context) => GamePage(scoreList: userList,)),
       );
     } else {
       null;
     }
+  }
+
+  Widget _buildResetButton() {
+    return ElevatedButton(
+      onPressed: _resetUser,
+      style: ElevatedButton.styleFrom(
+          backgroundColor:
+          (userList.isNotEmpty) ? Colors.pink[300] : Colors.grey),
+      child: Text(
+        '초기화',
+        style: TextStyle(
+            color: (userList.length > 1) ? Colors.white : Colors.black26),
+      ),
+    );
+  }
+
+  void _resetUser() {
+    setState(() {
+      if (userList.isNotEmpty) {
+        userList.clear();
+      }
+      print('#############clear list length: ${userList.length}');
+      print('#############clear userList: $userList');
+    });
   }
 }

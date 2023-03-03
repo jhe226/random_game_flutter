@@ -4,17 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/components/oo_elevated_button.dart';
 
 import '../components/card_user_list.dart';
+import '../components/radio_button.dart';
+import '../components/radio_controller.dart';
 import '../components/user.dart';
 
 class GamePage extends StatefulWidget {
-  const GamePage({Key? key}) : super(key: key);
+  List<User> scoreList;
+
+  GamePage({required this.scoreList});
+
+  final RadioGroupController _controller = RadioGroupController(-1);
 
   @override
   State<GamePage> createState() => _GamePageState();
 }
 
 class _GamePageState extends State<GamePage> {
-  List<User> scoreList = [];
   int index = 0;
 
   @override
@@ -28,13 +33,14 @@ class _GamePageState extends State<GamePage> {
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildUserList(),
             SizedBox(height: 30.h),
             const Text(
               'push the button',
             ),
-            // _buildScore(),
+            _buildScore(),
             _buildGetNumberButton(),
             SizedBox(height: 10.h),
             _buildResultButton(),
@@ -50,8 +56,9 @@ class _GamePageState extends State<GamePage> {
         height: 40.h,
         alignment: Alignment.center,
         child: ListView.builder(
+          itemCount: widget.scoreList.length,
           itemBuilder: (context, index) => Text(
-            '${scoreList[index].score}',
+            '${widget.scoreList[index].score}',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ));
@@ -62,11 +69,15 @@ class _GamePageState extends State<GamePage> {
         buttonPressed: () {
           setState(() {
             int rnd = Random().nextInt(100) + 1;
-            scoreList.add(User(userName: '', score: rnd));
+            widget.scoreList[index].score = rnd;
+            print('###############=user: ${widget.scoreList[index].userName}');
+            print('###############=score: ${widget.scoreList[index].score}');
           });
         },
         buttonTitle: '숫자 생성하기');
   }
+
+
 
   Widget _buildResultButton() {
     return OoElevatedButton(
@@ -99,24 +110,25 @@ class _GamePageState extends State<GamePage> {
       ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: scoreList.length,
+        itemCount: widget.scoreList.length,
         itemBuilder: (context, position) {
-          print('userList: ${scoreList[position].userName}');
-          return UserListCard(userName: scoreList[position].userName);
+          print('userList: ${widget.scoreList[position].userName}');
+          return RadioButtonCustom(
+            controller: widget._controller,
+            userName: widget.scoreList[position].userName,
+            index: position,
+            onEvent: () {
+              widget.scoreList[position].score = 0;
+            },
+          );
         },
       ),
     );
   }
 
-  void _resetNumber(int index) {
-    setState(() {
-      scoreList.clear();
-    });
-  }
-
-  List<User> getResult() {
-    scoreList.sort();
-    return scoreList;
+  User getResult() {
+    widget.scoreList.sort();
+    return widget.scoreList.first;
   }
 
   Widget _showResult() {
