@@ -67,7 +67,7 @@ class _GamePageState extends State<GamePage> {
           print('##########=userList: ${widget.scoreList[position].userName}');
           return RadioButtonCustom(
             controller: widget._controller,
-            userName: widget.scoreList[position].userName,
+            buttonTitle: widget.scoreList[position].userName,
             index: position,
             onEvent: () {
               setState(() {

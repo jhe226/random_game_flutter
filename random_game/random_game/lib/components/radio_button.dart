@@ -4,14 +4,14 @@ import 'package:random_game/components/radio_controller.dart';
 
 class RadioButtonCustom extends StatelessWidget {
   final RadioGroupController controller;
-  final String userName;
+  final String buttonTitle;
   final int index;
   final VoidCallback onEvent;
 
   const RadioButtonCustom({
     super.key,
     required this.controller,
-    required this.userName,
+    required this.buttonTitle,
     required this.index,
     required this.onEvent,
   });
@@ -47,7 +47,7 @@ class RadioButtonCustom extends StatelessWidget {
               ),
             ),
             child: Text(
-              userName,
+              buttonTitle,
               style: TextStyle(
                 color: (index == value) ? Colors.pink : Colors.grey,
                 fontSize: 15.sp,
