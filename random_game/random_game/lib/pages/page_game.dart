@@ -134,8 +134,9 @@ class _GamePageState extends State<GamePage> {
   }
 
   String getResult() {
-    widget.scoreList.sort((a, b) => a.score.compareTo(b.score));
-    return '1위\n${widget.scoreList.reversed.first.userName}\n${widget.scoreList.reversed.first.score}점';
+    List<User> resultList = List.from(widget.scoreList);
+    resultList.sort((a, b) => a.score.compareTo(b.score));
+    return '1위\n${resultList.reversed.first.userName}\n${resultList.reversed.first.score}점';
   }
 
   Widget _showResult() {
