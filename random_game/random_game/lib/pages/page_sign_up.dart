@@ -61,8 +61,6 @@ class _SignUpPageState extends State<SignUpPage> {
         scrollDirection: Axis.horizontal,
         itemCount: userList.length,
         itemBuilder: (context, position) {
-          print('#######userList.length: ${userList.length}');
-          print('#######userList: ${userList[position].userName}');
           return UserListCard(userName: userList[position].userName);
         },
       ),
@@ -100,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
       width: 125.w,
       height: 30.h,
       child: ElevatedButton(
-        onPressed: () => (userList.isNotEmpty) ? _removeUser() : {},
+        onPressed: userList.isNotEmpty ? _removeUser : null,
         style: ElevatedButton.styleFrom(
             backgroundColor: (userList.isNotEmpty) ? Colors.pink[300] : Colors
                 .grey),
@@ -118,8 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (userList.isNotEmpty) {
         userList.removeLast();
       }
-      print('#############remove Cnt: ${userList.length}');
-      print('#############remove userList: $userList');
+
     });
   }
 
@@ -164,11 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _resetUser() {
     setState(() {
-      if (userList.isNotEmpty) {
-        userList.clear();
-      }
-      print('#############clear list length: ${userList.length}');
-      print('#############clear userList: $userList');
+      userList.clear();
     });
   }
 }

@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:random_game/components/oo_elevated_button.dart';
+import 'package:collection/collection.dart';
 
 import '../components/radio_button.dart';
 import '../components/radio_controller.dart';
@@ -64,7 +65,6 @@ class _GamePageState extends State<GamePage> {
         scrollDirection: Axis.horizontal,
         itemCount: widget.scoreList.length,
         itemBuilder: (context, position) {
-          print('##########=userList: ${widget.scoreList[position].userName}');
           return RadioButtonCustom(
             controller: widget._controller,
             buttonTitle: widget.scoreList[position].userName,
@@ -82,17 +82,15 @@ class _GamePageState extends State<GamePage> {
 
   Widget _buildScore() {
     return Container(
-        width: 360.w,
-        height: 40.h,
-        alignment: Alignment.center,
-        child: ListView.builder(
-          itemCount: widget.scoreList.length,
-          itemBuilder: (context, index) => Text(
-            '${selectedModel?.score ?? 0}',
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-        ));
+      width: 360.w,
+      height: 40.h,
+      alignment: Alignment.center,
+      child: Text(
+        '${selectedModel?.score ?? 0}',
+        style: Theme.of(context).textTheme.headlineMedium,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 
   Widget _buildGetNumberButton() {
@@ -101,8 +99,6 @@ class _GamePageState extends State<GamePage> {
           setState(() {
             int rnd = Random().nextInt(100) + 1;
             selectedModel?.score = rnd;
-            print('###############=user: ${selectedModel?.userName}');
-            print('###############=score: ${selectedModel?.score}');
           });
         },
         buttonTitle: '숫자 생성하기');
@@ -133,10 +129,14 @@ class _GamePageState extends State<GamePage> {
         buttonTitle: '결과 보기');
   }
 
-  String getResult() {
-    List<User> resultList = List.from(widget.scoreList);
-    resultList.sort((a, b) => a.score.compareTo(b.score));
-    return '1위\n${resultList.reversed.first.userName}\n${resultList.reversed.first.score}점';
+  List<String> getResult() {
+    var scoreList =
+        widget.scoreList.map((e) => e.score).toList().where((element) => false);
+    var wonUser = widget.scoreList
+        .where((element) => element.score == scoreList.max)
+        .toList();
+
+    return wonUser.map((e) => '1위\n${e.userName}\n${e.score}점').toList();
   }
 
   Widget _showResult() {
@@ -149,10 +149,16 @@ class _GamePageState extends State<GamePage> {
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 15.h),
-          Text(
-            getResult(),
-            textAlign: TextAlign.center,
-          ),
+          Column(
+            children: getResult()
+                .map(
+                  (e) => Text(
+                    e,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                .toList(),
+          )
         ],
       ),
     );
